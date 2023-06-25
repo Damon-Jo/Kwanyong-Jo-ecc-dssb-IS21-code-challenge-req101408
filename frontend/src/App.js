@@ -1,8 +1,10 @@
 import './App.css';
-import { Button, Navbar, Container, Nav, Toast, ToastContainer } from 'react-bootstrap';
+
 import Home from './pages/Home';
 import Add from './pages/Add';
 import { Route, Routes, Link} from 'react-router-dom';
+
+import Navheader from './components/Navheader';
 
 function App() {
   return (
@@ -10,14 +12,7 @@ function App() {
 
     <div className="App">
 
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">Application Dashboard</Navbar.Brand>
-          <Link to="/add">
-            <Button variant="primary">Add</Button>
-          </Link>
-        </Container>
-      </Navbar>
+      <Navheader />
 
 
       <Routes>
