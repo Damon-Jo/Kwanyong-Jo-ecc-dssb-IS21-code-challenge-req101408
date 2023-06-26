@@ -5,7 +5,7 @@ const app = express();
 const port = 5000;
 const path = require('path');
 // const dataFilePath = path.join(__dirname, 'data.json');
-const dataFilePath = path.resolve(__dirname, 'api', 'data.json');
+const dataFilePath = path.resolve(__dirname, 'src', 'data.json');
 
 // const bodyParser = require('body-parser');
 
@@ -13,12 +13,16 @@ app.use(cors());
 app.use(express.json());
 // app.use(bodyParser.json());
 
+app.get('/api/health', (req, res) => {
+    res.status(200).send('Message from server: Server is healthy!');
+});
 
-app.get('/api/projects', (req, res) => {
+
+app.get('/api/products', (req, res) => {
     fs.readFile(dataFilePath, 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading data file:', err);
-            res.status(500).json({ error: 'Failed to fetch projects' });
+            res.status(500).json({ error: 'Failed to fetch products' });
             return;
         }
 
@@ -27,12 +31,12 @@ app.get('/api/projects', (req, res) => {
             res.json(projects);
         } catch (parseError) {
             console.error('Error parsing data file:', parseError);
-            res.status(500).json({ error: 'Failed to fetch projects' });
+            res.status(500).json({ error: 'Failed to fetch products' });
         }
     });
 })
 
-app.get('/api/projects/:id', (req, res) => {
+app.get('/api/products/:id', (req, res) => {
     const productId = parseInt(req.params.id);
 
     fs.readFile(dataFilePath, 'utf8', (err, data) => {
@@ -59,7 +63,7 @@ app.get('/api/projects/:id', (req, res) => {
 });
 
 
-app.post('/api/projects', (req, res) => {
+app.post('/api/products', (req, res) => {
     const newProject = req.body;
     console.log(newProject);
 
@@ -76,7 +80,7 @@ app.post('/api/projects', (req, res) => {
                 productId: Date.now(),
                 productName: req.body.productName,
                 productOwnerName: req.body.productOwnerName,
-                Developers: req.body.Developers,
+                developers: req.body.developers,
                 scrumMaster: req.body.scrumMaster,
                 startDate: req.body.startDate,
                 methodology: req.body.methodology,
@@ -99,7 +103,7 @@ app.post('/api/projects', (req, res) => {
     });
 });
 
-app.put('/api/projects/:id', (req, res) => {
+app.put('/api/products/:id', (req, res) => {
     const productId = parseInt(req.params.id);
 
     fs.readFile(dataFilePath, 'utf8', (err, data) => {
@@ -116,7 +120,7 @@ app.put('/api/projects/:id', (req, res) => {
                 productId: productId,
                 productName: req.body.productName,
                 productOwnerName: req.body.productOwnerName,
-                Developers: req.body.Developers,
+                developers: req.body.developers,
                 scrumMaster: req.body.scrumMaster,
                 startDate: req.body.startDate,
                 methodology: req.body.methodology,
@@ -145,7 +149,7 @@ app.put('/api/projects/:id', (req, res) => {
     });
 });
 
-app.delete('/api/projects/:id', (req, res) => {
+app.delete('/api/products/:id', (req, res) => {
     const productId = parseInt(req.params.id);
 
     fs.readFile(dataFilePath, 'utf8', (err, data) => {
@@ -162,8 +166,6 @@ app.delete('/api/projects/:id', (req, res) => {
             console.log(deletedProject);
             const updatedProjects = projects.filter((project) => project.productId !== productId);
 
-            // console.log(updatedProject);
-
             fs.writeFile(dataFilePath, JSON.stringify(updatedProjects), (writeErr) => {
                 if (writeErr) {
                     console.error('Error writing data file:', writeErr);
@@ -178,6 +180,8 @@ app.delete('/api/projects/:id', (req, res) => {
         }
     });
 });
+
+
 
 
 app.listen(port, () => {
