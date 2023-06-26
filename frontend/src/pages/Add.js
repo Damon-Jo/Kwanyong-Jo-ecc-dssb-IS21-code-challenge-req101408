@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../constants'
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+
 
 function Add() {
   const navigate = useNavigate();

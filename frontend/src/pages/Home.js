@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
+import { API_BASE_URL } from '../constants';
 import ModalEdit from '../components/ModalEdit';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// const API_BASE_URL = 'http://localhost:5000/api';
 
 function Home() {
   const [projects, setProjects] = useState([]);
@@ -126,6 +127,13 @@ function Home() {
             </tr>
           ))}
         </tbody>
+        {/* Table footer */}
+        <tfoot>
+          <tr>
+            <td colSpan="8"></td>
+            <td className="text-right">Total Products: {projects.length}</td>
+          </tr>
+        </tfoot>
       </table>
 
       {/* Edit modal */}
