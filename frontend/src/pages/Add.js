@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../constants'
-import axios from 'axios';
-
+import ProductRepo from '../api/ProductRepo';
 
 
 function Add() {
@@ -15,6 +13,7 @@ function Add() {
   const [startDate, setStartDate] = useState('');
   const [methodology, setMethodology] = useState('');
   const [location, setLocation] = useState('');
+  const [error, setError] = useState(null);
 
   function handleProductNameChange(e) {
     setProductName(e.target.value);
@@ -83,20 +82,23 @@ function Add() {
       location
     };
 
+    // Send a POST request to the server to add a new product
 
-    axios.post(`${API_BASE_URL}/products`, data)
+    ProductRepo.addProduct(data)
       .then(response => {
         navigate('/');
       })
       .catch(error => {
+        // Handle the error when adding project fails
         console.error(error);
+        setError('An error occurred while adding the data. Please try again or check the server');
       });
   }
 
   return (
     <div className="container">
+      {error && <Alert variant="danger">{error}</Alert>}
       <h3 className="text-center text-2xl font-bold my-4">Add new Product</h3>
-
       <div className="form-container">
         <form className="w-50" onSubmit={handleSubmit}>
           <div className="form-group">

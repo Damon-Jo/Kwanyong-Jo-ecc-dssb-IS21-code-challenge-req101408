@@ -2,6 +2,10 @@
   max-width: 250px;
 }
 
+#product-name-cell {
+  max-width: 150px;
+}
+
 tr > th {
   background-color: lightgray;
 }

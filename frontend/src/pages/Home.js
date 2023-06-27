@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Button, Modal } from 'react-bootstrap';
-import { API_BASE_URL } from '../constants';
+import { Button, Modal,Alert  } from 'react-bootstrap';
 import ModalEdit from '../components/ModalEdit';
-
-// const API_BASE_URL = 'http://localhost:5000/api';
+import ProductRepo from '../api/ProductRepo';
 
 function Home() {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [error, setError] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -18,10 +17,13 @@ function Home() {
 
   async function fetchData() {
     try {
-      const response = await axios.get(`${API_BASE_URL}/products`);
-      setProjects(response.data);
+      const response = await ProductRepo.getAllProducts();
+      setProjects(response);
+      setError(null);
     } catch (error) {
+      // Handle the error when fetching projects fails
       console.error('Error fetching productss:', error);
+      setError('An error occurred while fetching the data. Please try again or check the server');
     }
   }
 
@@ -54,30 +56,34 @@ function Home() {
 
   // Handle the delete button click
   // Delete the project from projects array
-  function handleDeleteProject() {
-    axios
-      .delete(`${API_BASE_URL}/products/${selectedProject.productId}`)
+  async function handleDeleteProject() {
+    // axios
+    //   .delete(`${API_BASE_URL}/products/${selectedProject.productId}`)
+    await ProductRepo.deleteProduct(selectedProject.productId)
       .then(response => {
-
         // Remove the deleted project from the projects array
         setProjects(prevProjects =>
           prevProjects.filter(project => project.productId !== selectedProject.productId)
         );
         // Close the delete modal
         setShowDeleteModal(false);
+        setDeleteError(null);
       })
       .catch(error => {
         // Handle the error as needed
         console.error('Error deleting product:', error);
+        setDeleteError('An error occurred while deleting the product. Please try again or check the server.');
       });
   }
 
   function handleCloseDeleteModal() {
     setShowDeleteModal(false);
+    setDeleteError(null);
   }
 
   return (
     <div>
+      {error && <Alert variant="danger">{error}</Alert>}
       <h3 className="text-center text-2xl font-bold my-4">Product List</h3>
       <table className="mx-auto bg-white shadow-md rounded-lg">
         {/* Table head */}
@@ -100,7 +106,7 @@ function Home() {
             <tr key={project.productId}>
               {/* Table cells */}
               <td className="py-2 px-4">{index + 1}</td>
-              <td className="py-2 px-4">{project.productName}</td>
+              <td id="product-name-cell" className="py-2 px-4">{project.productName}</td>
               <td className="py-2 px-4">{project.scrumMaster}</td>
               <td className="py-2 px-4">{project.productOwnerName}</td>
               <td id="developer-cell" className="py-2 px-4">
@@ -158,6 +164,7 @@ function Home() {
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        {deleteError && <Alert variant="danger">{deleteError}</Alert>}
           <p>Are you sure you want to delete this product?</p>
         </Modal.Body>
         <Modal.Footer>
