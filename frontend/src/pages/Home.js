@@ -10,6 +10,7 @@ function Home() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [error, setError] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -42,6 +43,11 @@ function Home() {
       });
       return updatedProjects;
     });
+    setSuccessMessage('Product updated successfully.');
+
+    setTimeout(() => {
+      setSuccessMessage(null);
+    }, 2000);
   }
 
   function handleCloseEditModal() {
@@ -83,6 +89,7 @@ function Home() {
 
   return (
     <div>
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
       <h3 className="text-center text-2xl font-bold my-4">Product List</h3>
       <table className="mx-auto bg-white shadow-md rounded-lg">

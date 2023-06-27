@@ -13,7 +13,7 @@ app.get('/api/health', (req, res) => {
 
 app.get('/api/products', (req, res) => {
     ProductService.getAllProducts()
-        .then((projects) => res.json(projects))
+        .then((projects) => res.status(200).json(projects))
         .catch((error) =>
             res.status(500).json({ error: 'Failed to fetch products' })
         );
@@ -25,7 +25,7 @@ app.get('/api/products/:id', (req, res) => {
     ProductService.getProductById(productId)
         .then((project) => {
             if (project) {
-                res.json(project);
+                res.status(200).json(project);
             } else {
                 res.status(404).json({ error: 'Project not found' });
             }
@@ -39,7 +39,7 @@ app.post('/api/products', (req, res) => {
     const newProject = req.body;
 
     ProductService.addProduct(newProject)
-        .then((addedProject) => res.status(201).json(addedProject))
+        .then((addedProject) => res.status(200).json(addedProject))
         .catch((error) => res.status(500).json({ error: 'Failed to add project' }));
 });
 
