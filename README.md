@@ -21,6 +21,7 @@
     
 The data for CRUD operations is saved in Kwanyong-Jo-ecc-dssb-IS21-code-challenge-req101408/backend/src/data.json.
 
+For the information of API, access the swagger API document on localhost:5000/api/api-docs
 
 # Frontend - React.js
 1. In a separate terminal, Navigate to the folder Kwanyong-Jo-ecc-dssb-IS21-code-challenge-req101408/frontend and run the following commands.
