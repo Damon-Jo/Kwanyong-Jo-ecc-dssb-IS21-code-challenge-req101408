@@ -16,6 +16,7 @@
     "fs": "^0.0.1-security",
     "path": "^0.12.7",
     "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
     "swagger-ui-react": "^5.1.0"
   },
   "devDependencies": {

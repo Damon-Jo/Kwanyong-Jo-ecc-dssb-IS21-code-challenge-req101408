@@ -5,7 +5,6 @@ const dataFilePath = path.resolve(__dirname, 'src', 'data.json');
 
 const ProductService = {
   
-
   getAllProducts() {
     return new Promise((resolve, reject) => {
       fs.readFile(dataFilePath, 'utf8', (err, data) => {
